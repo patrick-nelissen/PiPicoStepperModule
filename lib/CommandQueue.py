@@ -7,18 +7,16 @@
 # 3. “A12345” makes the motor turn to Absolute position 12345
 # 4. “R” Tells the EZ Stepper to Run the command that it has received.
 # <CR> is a carriage return that tells the EZ Stepper that the command string is complete and should be parsed.
-#
-# Other (allmotion) examples:
-# A: Absolute move | Move Motor to absolute position ( microsteps ) 32 Bit Positioning = 0-4,294,967,296. 
-# P: Relative move in positive direction
-# D: Relative move in negative direction
-# Z: Home/Initialize motor
-# v: Start velovity
-# V: Maximum velocity
-# L: Set accelertion
 
+# Regex module
 import re
+
+# Time module
 from time import sleep, sleep_ms
+
+# Filesystem to write data to non-volatile flash
+import os
+os.chdir("/")
 
 from StepControl import Stepper
 
@@ -27,6 +25,7 @@ MY_ID_REGEX         = "^\/1.*$"
 RUN_COMMAND_REGEX   = "^\/1.*R$"
 VALID_COMMAND       = "([APDZvVTLse][0-9]*)|(R)"
 VALID_COMMAND_REGEX = "^\/[0-9]" + VALID_COMMAND + "$"
+PARSE_COMMAND_REGEX = "^([APDZvVLTRse])([0-9]*)$"
 
 # Stepper driver command sequence
 class CommandSequence:
@@ -34,6 +33,8 @@ class CommandSequence:
     CommandQueue = []
     
     myStepper = Stepper()
+    
+    storeProgram = False
     
     def _init_(self):
         pass
@@ -55,10 +56,34 @@ class CommandSequence:
             
             # Print for now. This is where we store the induvidual commends in a  list
             print("Command: ", matches.group(0))
-            self.CommandQueue.append(matches.group(0))
+            self.CommandQueue.append(matches.group(0))         
+            
+            if self.storeProgram:
+                filename = "program1.txt"
+                file = open(filename, "a")
+                file.write(matches.group(0))
+                file.close()
+                
+                # Last command a "R" command?
+                if matches.group(0) == b"R":
+                    # Stop storing the program
+                    self.storeProgram = False
+                    
+                    # Clear the command queue.
+                    # We only want to store, not execute
+                    self.CommandQueue.clear()
           
             # Remove the first match from the string and then look for a next match
             string = string[len(matches.group(0)): len(string)]
+            
+            if matches.group(0) == b"s1":
+                self.storeProgram = True
+                print("Store program: ", self.storeProgram)
+                
+                # Open file again as empty file
+                filename = "program1.txt"
+                file = open(filename, "w")
+                file.close() 
                  
     def Print(self):
         
