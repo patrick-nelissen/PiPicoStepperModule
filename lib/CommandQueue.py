@@ -142,7 +142,22 @@ class CommandSequence:
                 
                 if Command == "A":
                     
-                    print("Absolute Move not yet implemented")
+                    # Get the current absolute position
+                    relativeMoveDistance = int(Value)/10.0 - self.myStepper.GetAbsoluteMoveDistance()
+                    
+                    if relativeMoveDistance < 0:
+                        # Negative (CCW) relative move
+                        self.myStepper.SetStepDirection("CCW")                      
+                    else:
+                        # Positive (CW) relative move
+                        self.myStepper.SetStepDirection("CW")                         
+                        
+                    # Distance (value) is in 0.1 mm resolution
+                    self.myStepper.SetRelativeMoveDistance(abs(relativeMoveDistance))
+                    
+                    # Calculate and execute the move
+                    self.myStepper.CalcMove()
+                    self.myStepper.ExecMove()
                     
                 elif Command == "P":
 
@@ -152,13 +167,11 @@ class CommandSequence:
                     self.myStepper.SetStepDirection("CW")
                     
                     # Distance (value) is in 0.1 mm resolution
-                    self.myStepper.SetRelativeMoveDistance(int(Value)/10)
+                    self.myStepper.SetRelativeMoveDistance(int(Value)/10.0)
                     
                     # Calculate and execute the move
                     self.myStepper.CalcMove()
                     self.myStepper.ExecMove()
-
-                    #self.myStepper.DisableDriver()
                                         
                 elif Command == "D":
  
@@ -168,33 +181,32 @@ class CommandSequence:
                     self.myStepper.SetStepDirection("CCW")
                     
                     # Distance (value) is in 0.1 mm resolution
-                    self.myStepper.SetRelativeMoveDistance(int(Value)/10)
+                    self.myStepper.SetRelativeMoveDistance(int(Value)/10.0)
                     
                     # Calculate and execute the move
                     self.myStepper.CalcMove()
                     self.myStepper.ExecMove()
-
-                    #self.myStepper.DisableDriver()
                     
                 elif Command == "Z":
                     
                     self.myStepper.EnableDriver()
                     
-                    # Distance (value) is in 0.1 mm resolution
-                    self.myStepper.HomeAxis(int(Value)/10)
-
-                    #self.myStepper.DisableDriver()
+                    # Distance (Value) is in 1 mm resolution
+                    self.myStepper.HomeAxis(int(Value))
                     
                 elif Command == "v":
+                    # Start velocity : not implemented
                     pass
                 
                 elif Command == "V":
-                    pass
+
+                    # Max Velocity (Value) is in 1 mm/s resolution
+                    self.myStepper.SetMaxVelocity(int(Value))
                 
                 elif Command == "L":
                     
-                    # Acceleration (value) is in 0.1 mm/s2 resolution
-                    self.myStepper.SetAcceleration(Value/10)
+                    # Acceleration (value) is in 1 mm/s2 resolution
+                    self.myStepper.SetAcceleration(int(Value))
                     
                 elif Command == "M":
                     

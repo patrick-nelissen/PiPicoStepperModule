@@ -24,13 +24,13 @@ class Stepper:
     Home = Pin(5, Pin.IN)
 
     # Defaults
-    ss     = 0.137  # Stepsize in mm
-    vmax   = 100 # Maximum desired linear velocity in mm/s
-    acc    = 2000 # Acceleration in mm/s2
-    deltaS = 100.0  # Distance to travel in mm
-    hS     = 100  # Maximum distance to travel in mm when seeking home flag
-    absPos = -1.0   # Absolute position in mm (negative when invalid)
-    absCnt = -1     # Absolute stepcount in (micro)steps (negative when invalid)
+    ss     = 0.137 # Stepsize in mm
+    vmax   = 100   # Maximum desired linear velocity in mm/s
+    acc    = 2000  # Acceleration in mm/s2
+    deltaS = 100.0 # Distance to travel in mm
+    hS     = 100   # Maximum distance to travel in mm when seeking home flag
+    absPos = -1.0  # Absolute position in mm (negative when invalid)
+    absCnt = -1    # Absolute stepcount in (micro)steps (negative when invalid)
     
     StepDelays = []
     Homed = False
@@ -69,10 +69,9 @@ class Stepper:
         self.ss = ss
         print("Step size set to: ", self.ss, " mm")
 
-    def SetAbsoluteMoveDistance(self, absS):
-    
-        self.absS = absS
-        print("Absolute move distance set to: ", self.absS, " mm")
+    def GetAbsoluteMoveDistance(self):
+        
+        return self.absPos
 
     def SetRelativeMoveDistance(self, deltaS):
     
@@ -205,9 +204,19 @@ class Stepper:
         if self.Homed :
 
             if self.StepDirection == "CW":
+                
                 self.Dir.value(1)
+                
+                # Calculate new absolute step count
+                self.absCnt = self.absCnt + round(abs(self.deltaS) / self.ss)
+                
             elif self.StepDirection == "CCW":
+                
                 self.Dir.value(0)
+
+                # Calculate new absolute step count
+                self.absCnt = self.absCnt - round(abs(self.deltaS) / self.ss)
+
             else:
                 print("Undefined step direction: ", StepDirection)
                 
@@ -222,6 +231,10 @@ class Stepper:
                 self.Ste.value(0)
                 
                 sleep_us(StepDelay)
+            
+            self.absPos = float(self.absCnt) * self.ss
+            print("New Absolute stepcount: ", str(self.absCnt), " steps ", str(self.absPos), "mm" )
+            
         else:
             print("Axis has not been homed!")
 
