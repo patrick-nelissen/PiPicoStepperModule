@@ -43,7 +43,8 @@ while True:
     
     RxStr = uart0.read()
     if RxStr != None:
-        RxStr.decode('utf-8')
+        # Decode byte string to character string
+        RxStr=RxStr.decode('utf-8', 'replace')
         commandReceived = True
         
         # Command for me?
@@ -51,8 +52,9 @@ while True:
             
             # Valid Command?
             if myQueue.ValidCommand(RxStr):
-                # Add to cammand queue
+                # Add to command queue
                 myQueue.AddToQueue(RxStr)
+                
             # Print the queue
             myQueue.Print()
            

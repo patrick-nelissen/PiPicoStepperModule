@@ -20,7 +20,7 @@ os.chdir("/")
 
 from StepControl import Stepper
 
-
+MY_ID               = "/1"
 MY_ID_REGEX         = "^\/1.*$"
 RUN_COMMAND_REGEX   = "^\/1.*R$"
 VALID_COMMAND       = "([APDZvVTLse][0-9]*)|(R)"
@@ -65,7 +65,7 @@ class CommandSequence:
                 file.close()
                 
                 # Last command a "R" command?
-                if matches.group(0) == b"R":
+                if matches.group(0) == "R":
                     # Stop storing the program
                     self.storeProgram = False
                     
@@ -76,7 +76,7 @@ class CommandSequence:
             # Remove the first match from the string and then look for a next match
             string = string[len(matches.group(0)): len(string)]
             
-            if matches.group(0) == b"s1":
+            if matches.group(0) == "s1":
                 self.storeProgram = True
                 print("Store program: ", self.storeProgram)
                 
@@ -140,11 +140,11 @@ class CommandSequence:
                 print("Command: ", Command, " with value: ", Value)
                 
                 
-                if Command == b"A":
+                if Command == "A":
                     
                     print("Absolute Move not yet implemented")
                     
-                elif Command == b"P":
+                elif Command == "P":
 
                     self.myStepper.EnableDriver()
                     
@@ -160,7 +160,7 @@ class CommandSequence:
 
                     #self.myStepper.DisableDriver()
                                         
-                elif Command == b"D":
+                elif Command == "D":
  
                     self.myStepper.EnableDriver()
 
@@ -176,7 +176,7 @@ class CommandSequence:
 
                     #self.myStepper.DisableDriver()
                     
-                elif Command == b"Z":
+                elif Command == "Z":
                     
                     self.myStepper.EnableDriver()
                     
@@ -185,36 +185,55 @@ class CommandSequence:
 
                     #self.myStepper.DisableDriver()
                     
-                elif Command == b"v":
+                elif Command == "v":
                     pass
                 
-                elif Command == b"V":
+                elif Command == "V":
                     pass
                 
-                elif Command == b"L":
+                elif Command == "L":
                     
                     # Acceleration (value) is in 0.1 mm/s2 resolution
                     self.myStepper.SetAcceleration(Value/10)
                     
-                elif Command == b"M":
+                elif Command == "M":
                     
                     # Value in Milisecond units
                     sleep(int(Value))
                     
-                elif Command == b"R":
+                elif Command == "R":
                    
                     print("BEFORE CLEAR", self.CommandQueue)
                     # All commands have run, empty queue
                     self.CommandQueue.clear()
                     print("AFTER CLEAR", self.CommandQueue)
                 
-                elif Command == b"s":
+                elif Command == "s":
+                    
                     # Stores a program 0-10, Program 0 is executed on power up.
                     pass
                 
-                elif Command == b"e":
-                    # Executes stored program 0-10.
-                    pass
+                elif Command == "e":
+                    
+                    # Execute stored program.
+                    
+                    filename = "program{}.txt"
+                    file = open(filename.format(int(Value)))
+                    CommandStr = file.read()
+                    print("Loading command string: ", CommandStr)
+                    file.close()
+                    
+                    # The AddQueue expects the controller's MY_ID
+                    CommandStr = MY_ID + CommandStr
+                    
+                    # Clear the queue that we have
+                    self.CommandQueue.clear()
+                    
+                    # Load the stored one
+                    self.AddToQueue(CommandStr)
+                    
+                    # Execute it
+                    self.ExecCommandQueue()
                 
                 else:
                     
