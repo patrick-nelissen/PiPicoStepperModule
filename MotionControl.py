@@ -1,7 +1,7 @@
 import machine
 from machine import Pin, UART
 from time import sleep_ms
-from CommandQueue import CommandQueue
+from CommandQueue import CommandSequence
 
 
 # RS485 pin definitions
@@ -35,7 +35,7 @@ receiveData()
 flushSerial(uart0)
 
 
-myQueue = CommandQueue()
+myQueue = CommandSequence()
 
 while True:
     
@@ -79,8 +79,3 @@ while True:
         if myQueue.RunCommand(RxStr):
             # Execute the queue of commands
             myQueue.ExecCommandQueue()
-            
-        # Did we get a Program command?
-        if myQueue.ProgramCommand(RxStr):
-            # Execute the queue of commands
-            myQueue.ExecCommandQueue()    
