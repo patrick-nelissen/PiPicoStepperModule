@@ -25,7 +25,7 @@ class Stepper:
 
     # Defaults
     ss     = 0.137 # Stepsize in mm
-    vmax   = 100   # Maximum desired linear velocity in mm/s
+    vmax   = 1000  # Maximum desired linear velocity in mm/s
     acc    = 2000  # Acceleration in mm/s2
     deltaS = 100.0 # Distance to travel in mm
     hS     = 100   # Maximum distance to travel in mm when seeking home flag
