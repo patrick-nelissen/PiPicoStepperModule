@@ -222,18 +222,35 @@ class CommandSequence:
                 
                 elif Command == "s":
                     
-                    # Stores a program 0-10, Program 0 is executed on power up.
-                    pass
-                
+                    # Stores a program 0-10
+                    # Program 0 is executed upon startup (not implemented)
+                    filename = "program{}.txt"
+                    
+                    #os.remove(filename.format(int(Value)))
+                    file = open(filename.format(int(Value)), "w")
+                    
+                    # Remove the first command from the queue
+                    # We do not want to store the 's#'
+                    self.CommandQueue.pop(0)
+                    
+                    for cmd in self.CommandQueue:
+                        file.write(cmd)
+                    file.close()                    
+                    
+                    # Clear the queue that we entered this loop in 
+                    self.CommandQueue.clear()
+                                        
                 elif Command == "e":
                     
-                    # Execute stored program.
-                    
+                    # Open the appropriate file that has the program stored.
                     filename = "program{}.txt"
                     file = open(filename.format(int(Value)))
+                    
+                    # Read the stored command sequence an dclose the file
                     CommandStr = file.read()
-                    print("Loading command string: ", CommandStr)
                     file.close()
+                    
+                    print("Loading command string: ", CommandStr)
                     
                     # The AddQueue expects the controller's MY_ID
                     CommandStr = MY_ID + CommandStr
@@ -241,7 +258,7 @@ class CommandSequence:
                     # Clear the queue that we have
                     self.CommandQueue.clear()
                     
-                    # Load the stored one
+                    # Load the stored command sequence
                     self.AddToQueue(CommandStr)
                     
                     # Execute it
