@@ -34,8 +34,8 @@ while 1 :
         ser.write(string)
         out = ""
         outString = ""
-        # let's wait 0.01 second before reading output (let's give device time to answer)
-        time.sleep(0.01)
+        # let's wait 0.1 second before reading output (let's give device time to answer)
+        time.sleep(0.1)
         while ser.inWaiting() > 0:
             out = ser.read(1)
             outString += out.decode()
