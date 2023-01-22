@@ -27,20 +27,28 @@ def  transmitData():
 # Set RST LOW to receive data
 def receiveData():
     RST.value(0)      
- 
+
+# Command reply status
+UNKNOWN     = -1 # Unknown status
+NO_ERROR    =  0 # No error
+INIT_ERROR  =  1 # Initialization error
+BAD_COMMAND =  2 # Bad Command
+OP_OO_RANGE =  3 # Operand out of range
+
+
 # Start with listening
 receiveData()
 
 # Flush startup garbage from serial buffer
 flushSerial(uart0)
 
-
 myQueue = CommandSequence()
 
 while True:
     
     commandReceived = False
-    
+    RxStatus = NO_ERROR
+
     RxStr = uart0.read()
     if RxStr != None:
         # Decode byte string to character string
@@ -54,6 +62,9 @@ while True:
             if myQueue.ValidCommand(RxStr):
                 # Add to command queue
                 myQueue.AddToQueue(RxStr)
+                rxStatus = NO_ERROR
+            else:
+                rxStatus = BAD_COMMAND
                 
             # Print the queue
             myQueue.Print()
@@ -65,8 +76,8 @@ while True:
         # Switch RS485 levelshifter to transmit mode
         transmitData()
                
-        # Write the ack
-        uart0.write("ACK")
+        # Write the RxStatus
+        uart0.write(str(RxStatus))
 
         # Give the hardware some time to kick out this data
         sleep_ms(1)
