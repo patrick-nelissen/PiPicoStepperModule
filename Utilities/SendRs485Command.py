@@ -1,20 +1,20 @@
 import time
 import serial
 
+
+rxStatus = {
+    "-1" : "Unknow Status",
+     "0" : "No Error",
+     "1" : "Initialization Error",
+     "2" : "Bad Command",
+     "3" : "Operand Outof Range"
+}
+
+
 # configure the serial connections (the parameters differs on the device you are connecting to)
 ser = serial.Serial("COM16", 57600, timeout=0, bytesize=8, parity="N", stopbits=1)
 
 ser.isOpen()
-
-
-
-# while True:
-#     string = "HELLO\n\r"
-#     print(string)
-#     # send the character to the device
-#     # (note that I happend a \r\n carriage return and line feed to the characters - this is requested by my device)
-#     ser.write(bytes(string, "utf-8"))
-#     time.sleep(1)
 
 print( 'Enter your serial commands below.\r\nInsert "exit" to leave the application.')
 
@@ -41,4 +41,4 @@ while 1 :
             outString += out.decode()
             
         if outString != "":
-            print( "Serial Reply: " + outString)
+            print( "Serial Reply: " + rxStatus[outString])
