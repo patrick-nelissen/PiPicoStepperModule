@@ -4,6 +4,7 @@ Stepper Motor motion controller with trapezoidal motion profile and RS485 interf
 ## ABOUT
 
 This microPython application runs on a Raspberry Pi Pico (RP2040), and is controlling a Stepper Motor Driver Module. The hardware is a TB6600 derivative from Toshiba, specifically the TB67S109AFTG.
+
 The Module's encloser is re-engineered and modified to make room for:
 1. The Pi Pico board with USB access
 1. A serial RS-485 half-duplex converter and connectivity
