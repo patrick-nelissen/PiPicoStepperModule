@@ -1,7 +1,7 @@
-# PiPicoStepperModule
-Stepper Motor motion controller with RS485 interface
+# Pi Pico StepperModule
+Stepper Motor motion controller with trapezoidal motion profile and RS485 interface.
 
-## About
+## ABOUT
 
 This microPython application runs on a Raspberry Pi Pico (RP2040), and is controlling a Stepper Motor Driver Module bought on Amazon. The hardware driver is build around a TB6600 derivative from Toshiba, specifically the TB67S109AFTG.
 The Module's encloser is re-engineered and modified to make room for:
