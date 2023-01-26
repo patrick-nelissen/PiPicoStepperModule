@@ -47,7 +47,7 @@ myQueue = CommandSequence()
 while True:
     
     commandReceived = False
-    RxStatus = NO_ERROR
+    RxStatus = NO_ERROR 
 
     RxStr = uart0.read()
     if RxStr != None:
