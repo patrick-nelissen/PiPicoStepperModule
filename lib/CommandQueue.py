@@ -19,6 +19,7 @@ import os
 os.chdir("/")
 
 from StepControl import Stepper
+from StepConfiguration import StepperConfiguration
 
 MY_ID               = "/1"
 MY_ID_REGEX         = "^\/1.*$"
@@ -33,11 +34,13 @@ class CommandSequence:
     CommandQueue = []
     
     myStepper = Stepper()
+    myConfig = StepperConfiguration()
     
     storeProgram = False
     
-    def _init_(self):
-        pass
+    def __init__(self):
+
+        print("I am controller: ", self.myConfig.GetControllerNumber())
     
     def AddToQueue(self, string=""):
         
