@@ -24,8 +24,14 @@ from StepConfiguration import StepperConfiguration
 MY_ID               = "/1"
 MY_ID_REGEX         = "^\/1.*$"
 RUN_COMMAND_REGEX   = "^\/1.*R$"
+QUERY_REGEX         = "^\/1\?[0-9]$"
+RUN_QUERY_REGEX     = "\/1\?([0-9])"
 VALID_COMMAND       = "([APDZvVTLse][0-9]*)|(R)"
+VALID_QUERY         = "\?([0-9])"
 VALID_COMMAND_REGEX = "^\/[0-9]" + VALID_COMMAND + "$"
+VALID_QUERY_REGEX   = "\/[0-9]" + VALID_QUERY
+
+
 PARSE_COMMAND_REGEX = "^([APDZvVLTRse])([0-9]*)$"
 
 # Stepper driver command sequence
@@ -92,7 +98,7 @@ class CommandSequence:
         
         print(self.CommandQueue) 
 
-    def CommandForMe(self, string = ""):
+    def CommandOrQueryForMe(self, string = ""):
         
         self.Match = re.search(MY_ID_REGEX, string)
 
@@ -104,7 +110,7 @@ class CommandSequence:
         else:
             print("Not for me!", string)   
             return False
-        
+
     def ValidCommand(self, string = ""):
         
         self.Match = re.search(VALID_COMMAND_REGEX, string)
@@ -117,7 +123,20 @@ class CommandSequence:
         else:
             print("Invalid command: ", string)
             return False        
+
+    def ValidQuery(self, string = ""):
         
+        self.Match = re.search(VALID_QUERY_REGEX, string)
+
+        if self.Match != None:
+            
+            print("Valid query: ", string)
+            return True
+
+        else:
+            print("Invalid query: ", string)
+            return False 
+
     def RunCommand(self, string = ""):
         
         # Command string ends with a "R"
@@ -227,9 +246,10 @@ class CommandSequence:
                     
                     # Stores a program 0-10
                     # Program 0 is executed upon startup (not implemented)
+
+                    # Open a program file
                     filename = "program{}.txt"
                     
-                    #os.remove(filename.format(int(Value)))
                     file = open(filename.format(int(Value)), "w")
                     
                     # Remove the first command from the queue
@@ -274,5 +294,87 @@ class CommandSequence:
             else:
                 print("Invalid Command: ", Command)  
 
+
+    def GetQueueReply(self, string = ""):
+        
+        self.Match = re.search(VALID_QUERY_REGEX, string)
+        
+        print(string)
+        QueryNmbr = -1
+
+        if self.Match != None:
+            
+            # Get the query number
+            QueryNmbr = self.Match.group(1)
+                      
+            print("Query with value: ", QueryNmbr)
+            
+            if QueryNmbr == "0":
+                
+                return self.myStepper.GetAbsoluteMoveDistance()
+
+            elif QueryNmbr == "1":
+                
+                print("Query number not implented: ", QueryNmbr)
+                return 2 # BAD_COMMAND
+                
+            elif QueryNmbr == "2":
+                
+                return self.myStepper.GetMaxVelocity()
+                
+            elif QueryNmbr == "3":
+                
+                print("Query number not implented: ", QueryNmbr)
+                return 2 # BAD_COMMAND
+            
+            elif QueryNmbr == "4":
+                
+                print("Query number not implented: ", QueryNmbr)
+                return 2 # BAD_COMMAND
+            
+            elif QueryNmbr == "5":
+                
+                print("Query number not implented: ", QueryNmbr)
+                return 2 # BAD_COMMAND
+                
+            elif QueryNmbr == "6":
+                
+                return self.myStepper.GetStepSize()
+                
+            elif QueryNmbr == "7":
+                
+                print("Query number not implented: ", QueryNmbr)
+                return 2 # BAD_COMMAND
+            
+            elif QueryNmbr == "8":
+                
+                print("Query number not implented: ", QueryNmbr)
+                return 2 # BAD_COMMAND
+                                    
+            elif QueryNmbr == "9":
+                
+                # Erase all stored program strings
+                
+                for i in range(9):
+                    
+                    # Open a program file
+                    filename = "program{}.txt"                  
+                    file = open(filename.format(i), "w")
+                                      
+                    # Empty Command has "R" only                  
+                    file.write("R")
+                    file.close() 
+                
+                print("All stores program strings 0-9 reset to 'R' ")
+                return 0 # NO_ERROR
+            
+            else:
+                
+                print("Unknown query number: ", QueryNmbr)
+                return 2 # BAD_COMMAND
+           
+        else:
+            print("Invalid query number: ", QueryNmbr)  
+            return 2 # BAD_COMMAND
 
 

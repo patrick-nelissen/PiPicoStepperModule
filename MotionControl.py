@@ -47,7 +47,7 @@ myQueue = CommandSequence()
 while True:
     
     commandReceived = False
-    RxStatus = NO_ERROR 
+    RxStatus = UNKNOWN 
 
     RxStr = uart0.read()
     if RxStr != None:
@@ -55,16 +55,22 @@ while True:
         RxStr=RxStr.decode('utf-8', 'replace')
         commandReceived = True
         
-        # Command for me?
-        if myQueue.CommandForMe(RxStr) :
+        # Command or query for me?
+        if myQueue.CommandOrQueryForMe(RxStr) :
             
             # Valid Command?
             if myQueue.ValidCommand(RxStr):
                 # Add to command queue
                 myQueue.AddToQueue(RxStr)
-                rxStatus = NO_ERROR
+                RxStatus = NO_ERROR
+                
+            # Valid Query?    
+            elif myQueue.ValidQuery(RxStr):
+                # Get the reply value
+                RxStatus = myQueue.GetQueueReply(RxStr)
+                
             else:
-                rxStatus = BAD_COMMAND
+                RxStatus = BAD_COMMAND
                 
             # Print the queue
             myQueue.Print()
@@ -75,7 +81,7 @@ while True:
                 
         # Switch RS485 levelshifter to transmit mode
         transmitData()
-               
+        
         # Write the RxStatus
         uart0.write(str(RxStatus))
 

@@ -25,17 +25,17 @@ class Stepper:
 
     # Defaults
     ss     = 0.137 # Stepsize in mm
-    vmax   = 500  # Maximum desired linear velocity in mm/s
-    acc    = 1000  # Acceleration in mm/s2
+    vmax   = 1000  # Maximum desired linear velocity in mm/s
+    acc    = 2000  # Acceleration in mm/s2
     deltaS = 100.0 # Distance to travel in mm
     hS     = 100   # Maximum distance to travel in mm when seeking home flag
-    absPos = -1.0  # Absolute position in mm (negative when invalid)
-    absCnt = -1    # Absolute stepcount in (micro)steps (negative when invalid)
+    absPos = 0.0   # Absolute position in mm (negative when invalid)
+    absCnt = 0     # Absolute stepcount in (micro)steps (negative when invalid)
     
     StepDelays = []
     Homed = False
         
-    def __init__(self, ss=0.137, vmax=1000, acc=2000, deltaS=100.0, hS=100, absPos=-1.0, absCnt=-1 ):
+    def _init_(self, ss=0.137, vmax=1000, acc=2000, deltaS=100.0, hS=100, absPo=-1.0, absCnt=-1 ):
         self.DisableDriver()
         self.Homed = False
         self.ss = ss         # Stepsize in mm
@@ -68,9 +68,20 @@ class Stepper:
     
         self.ss = ss
         print("Step size set to: ", self.ss, " mm")
+        
+    def GetStepSize(self):
+        
+        # Return step size in mm
+        return self.ss 
+
+    def SetAbsoluteMoveDistance(self, absS):
+    
+        self.absS = absS
+        print("Absolute move distance set to: ", self.absS, " mm")
 
     def GetAbsoluteMoveDistance(self):
-        
+    
+        # Return absolute motor position in mm
         return self.absPos
 
     def SetRelativeMoveDistance(self, deltaS):
@@ -83,10 +94,19 @@ class Stepper:
         self.vmax = vmax
         print("Max. velocity set to: ", self.vmax, " mm/s")
         
+    def GetMaxVelocity(self):
+            
+        # Return maximum velocity mm/s
+        return self.vmax
+        
     def SetAcceleration(self, acc):
     
         self.acc = acc
         print("Acceleration set to: ", self.acc, " mm/s2")
+    
+    def GetAcceleration(self):
+    
+        return self.acc        
            
     def HomeAxis(self, hS):
         
@@ -99,7 +119,7 @@ class Stepper:
         if self.Home.value() == 1:
             
             # Move out of the flag by 4.0 mm
-            self.SetStepDirection( "CCW" )       
+            self.SetStepDirection( "CW" )       
             absSteps = round(10.0 / self.ss) # Calc number of steps we need to do
             
             # Take 1 ms steps
@@ -113,7 +133,7 @@ class Stepper:
                 print("Home failed - Unable to move out of home-flag!")
                     
         # Find the flag by moving CCW for no more than 100.0mm
-        self.SetStepDirection( "CW" )       
+        self.SetStepDirection( "CCW" )       
         absSteps = round(self.hS / self.ss) # Calc number of steps we need to do                
 
         # Take 1 ms steps
@@ -200,23 +220,13 @@ class Stepper:
 
   
     def ExecMove(self):
-        
+
         if self.Homed :
 
             if self.StepDirection == "CW":
-                
                 self.Dir.value(1)
-                
-                # Calculate new absolute step count
-                self.absCnt = self.absCnt + round(abs(self.deltaS) / self.ss)
-                
             elif self.StepDirection == "CCW":
-                
                 self.Dir.value(0)
-
-                # Calculate new absolute step count
-                self.absCnt = self.absCnt - round(abs(self.deltaS) / self.ss)
-
             else:
                 print("Undefined step direction: ", StepDirection)
                 
@@ -231,10 +241,6 @@ class Stepper:
                 self.Ste.value(0)
                 
                 sleep_us(StepDelay)
-            
-            self.absPos = float(self.absCnt) * self.ss
-            print("New Absolute stepcount: ", str(self.absCnt), " steps ", str(self.absPos), "mm" )
-            
         else:
             print("Axis has not been homed!")
 

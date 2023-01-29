@@ -41,4 +41,5 @@ while 1 :
             outString += out.decode()
             
         if outString != "":
-            print( "Serial Reply: " + rxStatus[outString])
+            #print( "Serial Reply: " + rxStatus[outString])
+            print( "Serial Reply: " + outString)
