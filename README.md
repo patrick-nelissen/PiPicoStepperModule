@@ -28,4 +28,4 @@ The Module's encloser is re-engineered and modified to make room for:
 
    https://www.amazon.com/dp/B08247LRYS?psc=1&ref=ppx_yo2ov_dt_b_product_details
 
-
+## HARDWARE
