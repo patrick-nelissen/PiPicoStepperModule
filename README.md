@@ -19,17 +19,17 @@ The hardware files consist of:
 1. Build Instructions
 2. Wiring instruction for wiring the Pi Pico to:
 	- TB6600, 4A Stepper Motor Driver 4A for Nema 17 23 and 34 Stepper Motor
-      https://www.amazon.com/dp/B08PKJG2ND?ref=ppx_yo2ov_dt_b_product_details&th=1
+      https://www.amazon.com/dp/B08PKJG2ND
 	- SparkFun Transceiver Breakout - RS-485
       https://www.sparkfun.com/products/10124
 	- 6-Pin 5.08mm Pitch Male Female PCB Screw Terminal Block
-      https://www.amazon.com/dp/B093DMG1QZ?psc=1&ref=ppx_yo2ov_dt_b_product_details
+      https://www.amazon.com/dp/B093DMG1QZ
 	- IR Slotted Optical Optocoupler, 3.3V to 5V
-      https://www.amazon.com/dp/B09W5KWFV6?psc=1&ref=ppx_yo2ov_dt_b_product_details
+      https://www.amazon.com/dp/B09W5KWFV6
     - MP1584EN DC-DC, 3A Converter, 24V to 12V - 3V
-      https://www.amazon.com/dp/B08247LRYS?psc=1&ref=ppx_yo2ov_dt_b_product_details
+      https://www.amazon.com/dp/B08247LRYS
 	- PCB Screw Terminal Block receiver
-	  https://www.amazon.com/dp/B093DMG1QZ?psc=1&ref=ppx_yo2ov_dt_b_product_details
+	  https://www.amazon.com/dp/B093DMG1QZ
 3. Datasheets for:
 	- TB67S109AFTG stepper controller
 	- AllMotion Command Interface
