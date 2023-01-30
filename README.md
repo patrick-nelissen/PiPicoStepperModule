@@ -12,32 +12,24 @@ The Module's encloser is re-engineered and modified to make room for:
 4. Opto Coupler connectivity to home the controlled axis
 5. PCB Screw Terminal Block receiver for external connectivity of item 3. and 4.
 
-## PARTS
-1. TB6600, 4A Stepper Motor Driver 4A for Nema 17 23 and 34 Stepper Motor
-
-   https://www.amazon.com/dp/B08PKJG2ND?ref=ppx_yo2ov_dt_b_product_details&th=1
-2. SparkFun Transceiver Breakout - RS-485
-
-   https://www.sparkfun.com/products/10124
-3. 6-Pin 5.08mm Pitch Male Female PCB Screw Terminal Block
-
-   https://www.amazon.com/dp/B093DMG1QZ?psc=1&ref=ppx_yo2ov_dt_b_product_details
-4. IR Slotted Optical Optocoupler, 3.3V to 5V
-
-   https://www.amazon.com/dp/B09W5KWFV6?psc=1&ref=ppx_yo2ov_dt_b_product_details
-5. MP1584EN DC-DC, 3A Converter, 24V to 12V - 3V
-
-   https://www.amazon.com/dp/B08247LRYS?psc=1&ref=ppx_yo2ov_dt_b_product_details
 
 ## HARDWARE
 
 The hardware files consist of:
 1. Build Instructions
 2. Wiring instruction for wiring the Pi Pico to:
-	- DC/DC Converter
-	- RS-485 half-duplex converter
-	- PCB Screw Terminal connector
-	- Stepper Controller
+	- TB6600, 4A Stepper Motor Driver 4A for Nema 17 23 and 34 Stepper Motor
+      https://www.amazon.com/dp/B08PKJG2ND?ref=ppx_yo2ov_dt_b_product_details&th=1
+	- SparkFun Transceiver Breakout - RS-485
+      https://www.sparkfun.com/products/10124
+	- 6-Pin 5.08mm Pitch Male Female PCB Screw Terminal Block
+      https://www.amazon.com/dp/B093DMG1QZ?psc=1&ref=ppx_yo2ov_dt_b_product_details
+	- IR Slotted Optical Optocoupler, 3.3V to 5V
+      https://www.amazon.com/dp/B09W5KWFV6?psc=1&ref=ppx_yo2ov_dt_b_product_details
+    - MP1584EN DC-DC, 3A Converter, 24V to 12V - 3V
+      https://www.amazon.com/dp/B08247LRYS?psc=1&ref=ppx_yo2ov_dt_b_product_details
+	- PCB Screw Terminal Block receiver
+	  https://www.amazon.com/dp/B093DMG1QZ?psc=1&ref=ppx_yo2ov_dt_b_product_details
 3. Datasheets for:
 	- TB67S109AFTG stepper controller
 	- AllMotion Command Interface
