@@ -31,7 +31,7 @@ The hardware files consist of:
 3. Datasheets for:
 	- TB67S109AFTG stepper controller
 	- AllMotion Command Interface
-4. CAD design files in format:
+4. CAD design files for the re-engineered enclosure in format:
 	- SolidWorks .sldpt
 	- .step files
 	- .png file depicting the design
