@@ -7,9 +7,10 @@ This microPython application runs on a Raspberry Pi Pico (RP2040), and is contro
 
 The Module's encloser is re-engineered and modified to make room for:
 1. The Pi Pico board with USB access
-1. A serial RS-485 half-duplex converter and connectivity
 2. DC/DC Converter to power the Pi Pico
-3. Opto Coupler connectivity to home the controlled axis
+3. A serial RS-485 half-duplex converter and connectivity
+4. Opto Coupler connectivity to home the controlled axis
+5. PCB Screw Terminal Block receiver for external connectivity of item 3. and 4.
 
 ## PARTS
 1. TB6600, 4A Stepper Motor Driver 4A for Nema 17 23 and 34 Stepper Motor
