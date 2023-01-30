@@ -29,3 +29,24 @@ The Module's encloser is re-engineered and modified to make room for:
    https://www.amazon.com/dp/B08247LRYS?psc=1&ref=ppx_yo2ov_dt_b_product_details
 
 ## HARDWARE
+
+The hardware files consist of:
+1. Build Instructions
+2. Wiring instruction for wiring the Pi Pico to:
+	- DC/DC Converter
+	- RS-485 half-duplex converter
+	- PCB Screw Terminal connector
+	- Stepper Controller
+3. Datasheets for:
+	- TB67S109AFTG stepper controller
+	- AllMotion Command Interface
+4. CAD design files in format:
+	- SolidWorks .sldpt
+	- .step files
+	- .png file depicting the design
+5. 3D print files in:
+	- .3mf format (PrusaSlicer 2.5 export)
+	- .stl file
+	- .step file (see CAD)
+	- .png depicting the "Paint On Supports" that are recommended
+	
