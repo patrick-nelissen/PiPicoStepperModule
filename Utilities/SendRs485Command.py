@@ -2,15 +2,6 @@ import time
 import serial
 
 
-rxStatus = {
-    "-1" : "Unknow Status",
-     "0" : "No Error",
-     "1" : "Initialization Error",
-     "2" : "Bad Command",
-     "3" : "Operand Outof Range"
-}
-
-
 # configure the serial connections (the parameters differs on the device you are connecting to)
 ser = serial.Serial("COM16", 57600, timeout=0, bytesize=8, parity="N", stopbits=1)
 
@@ -41,5 +32,4 @@ while 1 :
             outString += out.decode()
             
         if outString != "":
-            #print( "Serial Reply: " + rxStatus[outString])
             print( "Serial Reply: " + outString)
