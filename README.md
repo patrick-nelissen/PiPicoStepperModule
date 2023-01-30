@@ -28,8 +28,6 @@ The hardware files consist of:
       https://www.amazon.com/dp/B09W5KWFV6
     - MP1584EN DC-DC, 3A Converter, 24V to 12V - 3V
       https://www.amazon.com/dp/B08247LRYS
-	- PCB Screw Terminal Block receiver
-	  https://www.amazon.com/dp/B093DMG1QZ
 3. Datasheets for:
 	- TB67S109AFTG stepper controller
 	- AllMotion Command Interface
