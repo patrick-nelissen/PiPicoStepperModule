@@ -12,6 +12,21 @@ The Module's encloser is re-engineered and modified to make room for:
 4. Opto Coupler connectivity to home the controlled axis
 5. PCB Screw Terminal Block receiver for external connectivity of item 3. and 4.
 
+## SOFTWARE
+
+### MotionControl.py
+This module is the toplevel module that communicates with the master on the RS485 serial interface. It monitors the RS485 bus for commands and queries and acts on those that are intended for its hardware module.
+
+### lib/CommandQueue.py
+This module manages the mimicking of the AllMotion protocol as specified in Command_Set.pdf in the \Hardware\Datasheets folder.
+
+### lib/StepConfiguration/py
+This module manages configuration parameters specific to this hardware.
+These include, but are not limitted to module number (RS485 is a multi drop communication bus), but also defaults used by StepControl.py
+ 
+### lib/StepControl.py
+This module manages the control of the low level stepper hardware's ENABLE, DIRECTION, and STEP signals.
+It takes speed, acceleration, move distance, stepsize etc as input, and then calculates a pulse delay table to create and execute a trapezoidal motion profile.
 
 ## HARDWARE
 
