@@ -164,27 +164,29 @@ class CommandSequence:
                 
                 if Command == "A":
                     
-                    # Get the current absolute position
+                    # Calculate the relative difference between where we are and where we need to go                  
                     relativeMoveDistance = int(Value)/10.0 - self.myStepper.GetAbsoluteMoveDistance()
-                    print("Absolute Move Distance: ", self.myStepper.GetAbsoluteMoveDistance())
-                    print("Relative Move Distance: ", relativeMoveDistance)
                     
-                    if relativeMoveDistance < 0:
-                        # Negative (CCW) relative move
-                        self.myStepper.SetStepDirection("CCW")                      
-                    else:
-                        # Positive (CW) relative move
-                        self.myStepper.SetStepDirection("CW")
-                    
-                    
-                    if relativeMoveDistance != 0.0:
-                        
-                        self.myStepper.SetAbsoluteMoveDistance(abs(relativeMoveDistance))                    
+                    # Do we need to move?
+                    if relativeMoveDistance != 0.0 :
+                                       
+                        # What relative direction               
+                        if relativeMoveDistance < 0:
+                            # Negative (CCW) relative move
+                            self.myStepper.SetStepDirection("CCW")                      
+                        else:
+                            # Positive (CW) relative move
+                            self.myStepper.SetStepDirection("CW")
+                                
+                        # Set that relative direction    
                         self.myStepper.SetRelativeMoveDistance(abs(relativeMoveDistance))
 
                         # Calculate and execute the move
                         self.myStepper.CalcMove()
                         self.myStepper.ExecMove()
+                            
+                        # Update the aboslute position moved to
+                        self.myStepper.SetAbsoluteMoveDistance(int(Value)/10.0)     
                     
                 elif Command == "P":
 
