@@ -36,7 +36,7 @@ class Stepper:
     CoastStepDelay=0
     Homed = False
         
-    def _init_(self, ss=0.137, vmax=1000, acc=2000, deltaS=100.0, hS=100, absPo=-1.0, absCnt=-1 ):
+    def __init__(self, ss=0.137, vmax=1000, acc=2000, deltaS=100.0, hS=100, absPos=-1.0, absCnt=-1 ):
         self.DisableDriver()
         self.Homed = False
         self.ss = ss         # Stepsize in mm
