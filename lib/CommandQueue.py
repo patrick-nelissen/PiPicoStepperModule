@@ -166,20 +166,25 @@ class CommandSequence:
                     
                     # Get the current absolute position
                     relativeMoveDistance = int(Value)/10.0 - self.myStepper.GetAbsoluteMoveDistance()
+                    print("Absolute Move Distance: ", self.myStepper.GetAbsoluteMoveDistance())
+                    print("Relative Move Distance: ", relativeMoveDistance)
                     
                     if relativeMoveDistance < 0:
                         # Negative (CCW) relative move
                         self.myStepper.SetStepDirection("CCW")                      
                     else:
                         # Positive (CW) relative move
-                        self.myStepper.SetStepDirection("CW")                         
-                        
-                    # Distance (value) is in 0.1 mm resolution
-                    self.myStepper.SetRelativeMoveDistance(abs(relativeMoveDistance))
+                        self.myStepper.SetStepDirection("CW")
                     
-                    # Calculate and execute the move
-                    self.myStepper.CalcMove()
-                    self.myStepper.ExecMove()
+                    
+                    if relativeMoveDistance != 0.0:
+                        
+                        self.myStepper.SetAbsoluteMoveDistance(abs(relativeMoveDistance))                    
+                        self.myStepper.SetRelativeMoveDistance(abs(relativeMoveDistance))
+
+                        # Calculate and execute the move
+                        self.myStepper.CalcMove()
+                        self.myStepper.ExecMove()
                     
                 elif Command == "P":
 
@@ -190,7 +195,9 @@ class CommandSequence:
                     
                     # Distance (value) is in 0.1 mm resolution
                     self.myStepper.SetRelativeMoveDistance(int(Value)/10.0)
-                    
+
+                    self.myStepper.SetAbsoluteMoveDistance( self.myStepper.GetAbsoluteMoveDistance() + int(Value)/10.0)
+
                     # Calculate and execute the move
                     self.myStepper.CalcMove()
                     self.myStepper.ExecMove()
@@ -205,6 +212,8 @@ class CommandSequence:
                     # Distance (value) is in 0.1 mm resolution
                     self.myStepper.SetRelativeMoveDistance(int(Value)/10.0)
                     
+                    self.myStepper.SetAbsoluteMoveDistance( self.myStepper.GetAbsoluteMoveDistance() - int(Value)/10.0)
+          
                     # Calculate and execute the move
                     self.myStepper.CalcMove()
                     self.myStepper.ExecMove()

@@ -33,6 +33,7 @@ class Stepper:
     absCnt = 0     # Absolute stepcount in (micro)steps (negative when invalid)
     
     StepDelays = []
+    CoastStepDelay=0
     Homed = False
         
     def _init_(self, ss=0.137, vmax=1000, acc=2000, deltaS=100.0, hS=100, absPo=-1.0, absCnt=-1 ):
@@ -74,10 +75,10 @@ class Stepper:
         # Return step size in mm
         return self.ss 
 
-    def SetAbsoluteMoveDistance(self, absS):
+    def SetAbsoluteMoveDistance(self, absPos):
     
-        self.absS = absS
-        print("Absolute move distance set to: ", self.absS, " mm")
+        self.absPos = absPos
+        print("Absolute move distance set to: ", self.absPos, " mm")
 
     def GetAbsoluteMoveDistance(self):
     
@@ -186,39 +187,38 @@ class Stepper:
         vcurr = 0
 
         # Run garbage collector
-        print("Mem Free before garbage collection: ", gc.mem_free())
+        #print("Mem Free before garbage collection: ", gc.mem_free())
         gc.collect()
-        print("Mem Free after garbage collection: ", gc.mem_free())
+        #print("Mem Free after garbage collection: ", gc.mem_free())
 
 
         # Pre calculate the delays for the motion.
         # In that way the garbage collector will not kick in and create hick-ups within the pulsetrain to execute the move.
 
-        for incStep in range(absSteps):
+        for incStep in range(s_1/self.ss):
                    
             # calculate central position of current step
             s = (incStep + 0.5) * self.ss
             
             # calculate velocity at current step
-            if s < s_1:
-                vcurr = sqrt(2 * s * self.acc)
-            elif s < s_2:
-                vcurr = self.vmax
-            else:
-                vcurr = sqrt( self.vmax * self.vmax - 2 * (s - s_2) * self.acc)
+            vcurr = sqrt(2 * s * self.acc)
                
             # convert velocity to delay
             tDelay = round(self.ss / vcurr * 1e6) # in micro seconds
             
             # Store the motion data in this list
             self.StepDelays.append(tDelay)
+      
+        self.CoastSteps = round((s_2 - s_1) / self.ss)
+        self.CoastStepDelay = round(self.ss / vmax_target * 1e6) # in micro seconds
+        
+        print("CoastSteps: ", self.CoastSteps, "CoastStepDelay: ", self.CoastStepDelay)
 
         # Let the garbage collector do its thing prior to the move
-        print("Mem Free before garbage collection: ", gc.mem_free())
+        #print("Mem Free before garbage collection: ", gc.mem_free())
         gc.collect()
-        print("Mem Free after garbage collection: ", gc.mem_free())
+        #print("Mem Free after garbage collection: ", gc.mem_free())
 
-  
     def ExecMove(self):
 
         if self.Homed :
@@ -233,14 +233,34 @@ class Stepper:
                 # Default to CW
                 self.Dir.value(1)
             
-            # Now step through the list of pre-calculated delsyas and genere the pulse train to execute the motion
+            # Now step through the list of pre-calculated delays
+            # and generate the pulses for the acceleration profile
             for StepDelay in self.StepDelays:
                     
-                # act accordingly
+                # Generate pulse
                 self.Ste.value(1)
                 self.Ste.value(0)
                 
                 sleep_us(StepDelay)
+            
+            # Keep coasting with the same speed the acceleration profile was exited
+            for steps in range(self.CoastSteps):
+                
+                # Generate pulse
+                self.Ste.value(1)
+                self.Ste.value(0)
+                
+                sleep_us(self.CoastStepDelay)
+                
+            # Now step through the list of pre-calculated delays in reverse
+            # and generate the pulses for the decelleration profile
+            for StepDelay in reversed(self.StepDelays):
+                    
+                # Generate pulse
+                self.Ste.value(1)
+                self.Ste.value(0)
+                
+                sleep_us(StepDelay)
+                
         else:
             print("Axis has not been homed!")
-
