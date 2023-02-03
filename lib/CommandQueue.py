@@ -67,32 +67,8 @@ class CommandSequence:
             print("Command: ", matches.group(0))
             self.CommandQueue.append(matches.group(0))         
             
-            if self.storeProgram:
-                filename = "program1.txt"
-                file = open(filename, "a")
-                file.write(matches.group(0))
-                file.close()
-                
-                # Last command a "R" command?
-                if matches.group(0) == "R":
-                    # Stop storing the program
-                    self.storeProgram = False
-                    
-                    # Clear the command queue.
-                    # We only want to store, not execute
-                    self.CommandQueue.clear()
-          
             # Remove the first match from the string and then look for a next match
             string = string[len(matches.group(0)): len(string)]
-            
-            if matches.group(0) == "s1":
-                self.storeProgram = True
-                print("Store program: ", self.storeProgram)
-                
-                # Open file again as empty file
-                filename = "program1.txt"
-                file = open(filename, "w")
-                file.close() 
                  
     def Print(self):
         
@@ -241,10 +217,10 @@ class CommandSequence:
                     # Acceleration (value) is in 1 mm/s2 resolution
                     self.myStepper.SetAcceleration(int(Value))
                     
-                elif Command == "M":
+                elif Command == "T":
                     
                     # Value in Milisecond units
-                    sleep(int(Value))
+                    sleep_ms(int(Value))
                     
                 elif Command == "R":
                    
