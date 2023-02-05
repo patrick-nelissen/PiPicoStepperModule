@@ -6,7 +6,7 @@
 #  \____/|___/_.__/ \_____\___/|_| |_| |_|_| |_| |_|\__,_|_| |_|\__,_(_) .__/ \__, |
 #                                                                     | |     __/ |
 #                                                                     |_|    |___/ 
-# Use the REPL inmterafce instead of thr RS485 to send Allmotion Style commands
+# Use the REPL interface instead of thr RS485 to send Allmotion Style commands
 #
 import machine
 from machine import Pin, UART
