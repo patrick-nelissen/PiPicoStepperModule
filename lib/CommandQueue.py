@@ -1,12 +1,12 @@
-# COMMAND STRING EXAMPLE (allmotion)
+#   _____                                          _  ____                                      
+#  / ____|                                        | |/ __ \                                     
+# | |     ___  _ __ ___  _ __ ___   __ _ _ __   __| | |  | |_   _  ___ _   _  ___   _ __  _   _ 
+# | |    / _ \| '_ ` _ \| '_ ` _ \ / _` | '_ \ / _` | |  | | | | |/ _ \ | | |/ _ \ | '_ \| | | |
+# | |___| (_) | | | | | | | | | | | (_| | | | | (_| | |__| | |_| |  __/ |_| |  __/_| |_) | |_| |
+#  \_____\___/|_| |_| |_|_| |_| |_|\__,_|_| |_|\__,_|\___\_\\__,_|\___|\__,_|\___(_) .__/ \__, |
+#                                                                                  | |     __/ |
+#                                                                                  |_|    |___/ 
 #
-# /1A12345R<CR>
-# This breaks down to:
-# 1. “/” is the start character. It lets the EZ Steppers know that a command is coming in.
-# 2. “1” is the device address, (set on address switch on device).
-# 3. “A12345” makes the motor turn to Absolute position 12345
-# 4. “R” Tells the EZ Stepper to Run the command that it has received.
-# <CR> is a carriage return that tells the EZ Stepper that the command string is complete and should be parsed.
 
 # Regex module
 import re
