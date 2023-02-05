@@ -26,14 +26,11 @@ MY_ID_REGEX         = "^\/1.*$"
 RUN_COMMAND_REGEX   = "^\/1.*R$"
 QUERY_REGEX         = "^\/1\?[0-9]$"
 RUN_QUERY_REGEX     = "\/1\?([0-9])"
-#VALID_COMMAND       = "([APDZvVTLse][0-9]*)|(R)"
-VALID_COMMAND       = "^(?:[APDZvVTLse][0-9]+)*R?$"
+VALID_COMMAND       = "(?:[APDZvVTLse][0-9]+)*R?"
 VALID_QUERY         = "\?([0-9])"
 VALID_COMMAND_REGEX = "^\/[0-9]" + VALID_COMMAND + "$"
 VALID_QUERY_REGEX   = "\/[0-9]" + VALID_QUERY
-
-
-PARSE_COMMAND_REGEX = "^([APDZvVLTRse])([0-9]*)$"
+PARSE_COMMAND_REGEX = "([APDZvVTLse][0-9]+)|(R)"
 
 # Stepper driver command sequence
 class CommandSequence:
@@ -58,7 +55,7 @@ class CommandSequence:
             # Find a first match of a valid command
             # NOTE: MicroPython doesn't support counted repetitions; hence * instead of {0-10}
             #       MicroPyhton doesn't support repeated group matches
-            matches = re.search(VALID_COMMAND, string)
+            matches = re.search(PARSE_COMMAND_REGEX, string)
 
             # Get out of the while loop upon the first non-match
             if matches == None :
