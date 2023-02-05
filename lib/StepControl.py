@@ -22,21 +22,9 @@ class Stepper:
     Dir  = Pin(3, Pin.OUT)
     Ste  = Pin(4, Pin.OUT)
     Home = Pin(5, Pin.IN)
-
-    # Defaults
-    ss     = 0.137 # Stepsize in mm
-    vmax   = 1000  # Maximum desired linear velocity in mm/s
-    acc    = 2000  # Acceleration in mm/s2
-    deltaS = 100.0 # Distance to travel in mm
-    hS     = 100   # Maximum distance to travel in mm when seeking home flag
-    absPos = 0.0   # Absolute position in mm (negative when invalid)
-    absCnt = 0     # Absolute stepcount in (micro)steps (negative when invalid)
-    
-    StepDelays = []
-    CoastStepDelay=0
-    Homed = False
+         
+    def __init__(self, ss=0.137, vmax=1000, acc=2000, deltaS=100.0, hS=100, absPos=0.0, absCnt=0 ):
         
-    def __init__(self, ss=0.137, vmax=1000, acc=2000, deltaS=100.0, hS=100, absPos=-1.0, absCnt=-1 ):
         self.DisableDriver()
         self.Homed = False
         self.ss = ss         # Stepsize in mm
@@ -47,11 +35,16 @@ class Stepper:
         self.absPos = absPos # Absolute position in mm (negative when invalid)
         self.absCnt = absCnt # Absolute stepcount in (micro)steps (negative when invalid)
     
+        self.StepDelays = []
+        self.CoastStepDelay=0
+    
     def EnableDriver(self):
+        
         self.Ena.value(0)
         print("Driver enabled")
         
     def DisableDriver(self):
+        
         self.Ena.value(1)
         print("Driver disabled")
 
