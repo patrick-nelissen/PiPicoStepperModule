@@ -21,31 +21,34 @@ os.chdir("/")
 from StepControl import Stepper
 from StepConfiguration import StepperConfiguration
 
-MY_ID               = "/1"
-MY_ID_REGEX         = "^\/1.*$"
-RUN_COMMAND_REGEX   = "^\/1.*R$"
-QUERY_REGEX         = "^\/1\?[0-9]$"
-RUN_QUERY_REGEX     = "\/1\?([0-9])"
-VALID_COMMAND       = "(?:[APDZvVTLse][0-9]+)*R?"
-VALID_QUERY         = "\?([0-9])"
-VALID_COMMAND_REGEX = "^\/[0-9]" + VALID_COMMAND + "$"
-VALID_QUERY_REGEX   = "\/[0-9]" + VALID_QUERY
-PARSE_COMMAND_REGEX = "([APDZvVTLse][0-9]+)|(R)"
-
 # Stepper driver command sequence
-class CommandSequence:
-
+class CommandSequence:    
+    # Regex definitions used within this class
+    MY_ID               = "/1"
+    MY_ID_REGEX         = "^\/1.*$"
+    RUN_COMMAND_REGEX   = "^\/1.*R$"
+    QUERY_REGEX         = "^\/1\?[0-9]$"
+    RUN_QUERY_REGEX     = "\/1\?([0-9])"
+    VALID_COMMAND       = "(?:[APDZvVTLse][0-9]+)*R?"
+    VALID_QUERY         = "\?([0-9])"
+    VALID_COMMAND_REGEX = "^\/[0-9]" + VALID_COMMAND + "$"
+    VALID_QUERY_REGEX   = "\/[0-9]" + VALID_QUERY
+    PARSE_COMMAND_REGEX = "([APDZvVTLse][0-9]+)|(R)"
+    
+    #  List (queue) of commands
     CommandQueue = []
     
     myStepper = Stepper()
     myConfig = StepperConfiguration()
-    
-    storeProgram = False
-    
+       
     def __init__(self):
+        pass
 
-        print("I am controller: ", self.myConfig.GetControllerNumber())
-    
+    def ThisController(self, string ):
+        
+        MyControllerNmbr = str(self.myConfig.GetControllerNumber())
+        return string.replace("1", MyControllerNmbr)
+
     def AddToQueue(self, string=""):
         
         # Remove first 2 characters "/" and number       
@@ -55,7 +58,7 @@ class CommandSequence:
             # Find a first match of a valid command
             # NOTE: MicroPython doesn't support counted repetitions; hence * instead of {0-10}
             #       MicroPyhton doesn't support repeated group matches
-            matches = re.search(PARSE_COMMAND_REGEX, string)
+            matches = re.search(self.ThisController(self.PARSE_COMMAND_REGEX), string)
 
             # Get out of the while loop upon the first non-match
             if matches == None :
@@ -74,7 +77,7 @@ class CommandSequence:
 
     def CommandOrQueryForMe(self, string = ""):
         
-        self.Match = re.search(MY_ID_REGEX, string)
+        self.Match = re.search(self.ThisController(self.MY_ID_REGEX), string)
 
         if self.Match != None:
             
@@ -87,7 +90,7 @@ class CommandSequence:
 
     def ValidCommand(self, string = ""):
         
-        self.Match = re.search(VALID_COMMAND_REGEX, string)
+        self.Match = re.search(self.ThisController(self.VALID_COMMAND_REGEX), string)
 
         if self.Match != None:
             
@@ -100,7 +103,7 @@ class CommandSequence:
 
     def ValidQuery(self, string = ""):
         
-        self.Match = re.search(VALID_QUERY_REGEX, string)
+        self.Match = re.search(self.ThisController(self.VALID_QUERY_REGEX), string)
 
         if self.Match != None:
             
@@ -114,7 +117,7 @@ class CommandSequence:
     def RunCommand(self, string = ""):
         
         # Command string ends with a "R"
-        self.Match = re.search(RUN_COMMAND_REGEX, string)
+        self.Match = re.search(self.ThisController(self.RUN_COMMAND_REGEX), string)
 
         if self.Match != None:           
             return True
@@ -125,7 +128,7 @@ class CommandSequence:
         
         print("EXEC QUEUE", self.CommandQueue)
         for Command in self.CommandQueue:
-            self.Match = re.search("^([APDZvVLTRse])([0-9]*)$", Command)
+            self.Match = re.search(self.ThisController("^([APDZvVLTRse])([0-9]*)$"), Command)
 
             if self.Match != None:
                 
@@ -172,7 +175,8 @@ class CommandSequence:
                     # Distance (value) is in 0.1 mm resolution
                     self.myStepper.SetRelativeMoveDistance(int(Value)/10.0)
 
-                    self.myStepper.SetAbsoluteMoveDistance( self.myStepper.GetAbsoluteMoveDistance() + int(Value)/10.0)
+                    self.myStepper.SetAbsoluteMoveDistance( self.myStepper.GetAbsoluteMoveDistance()
+                                                            + int(Value)/10.0)
 
                     # Calculate and execute the move
                     self.myStepper.CalcMove()
@@ -188,7 +192,8 @@ class CommandSequence:
                     # Distance (value) is in 0.1 mm resolution
                     self.myStepper.SetRelativeMoveDistance(int(Value)/10.0)
                     
-                    self.myStepper.SetAbsoluteMoveDistance( self.myStepper.GetAbsoluteMoveDistance() - int(Value)/10.0)
+                    self.myStepper.SetAbsoluteMoveDistance( self.myStepper.GetAbsoluteMoveDistance()
+                                                            - int(Value)/10.0)
           
                     # Calculate and execute the move
                     self.myStepper.CalcMove()
@@ -261,7 +266,7 @@ class CommandSequence:
                     print("Loading command string: ", CommandStr)
                     
                     # The AddQueue expects the controller's MY_ID
-                    CommandStr = MY_ID + CommandStr
+                    CommandStr = self.ThisController(self.MY_ID) + CommandStr
                     
                     # Clear the queue that we have
                     self.CommandQueue.clear()
@@ -282,7 +287,7 @@ class CommandSequence:
 
     def GetQueueReply(self, string = ""):
         
-        self.Match = re.search(VALID_QUERY_REGEX, string)
+        self.Match = re.search(self.ThisController(self.VALID_QUERY_REGEX), string)
         
         print(string)
         QueryNmbr = -1
