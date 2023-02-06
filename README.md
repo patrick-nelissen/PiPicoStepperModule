@@ -1,11 +1,11 @@
-# Pi Pico StepperModule
+# Pi Pico Stepper Module
 Stepper Motor motion controller with trapezoidal motion profile and RS485 interface.
 
 ## ABOUT
 
-This microPython application runs on a Raspberry Pi Pico (RP2040), and is controlling a Stepper Motor Driver Module. The hardware is a TB6600 derivative from Toshiba, specifically the TB67S109AFTG.
+This microPython application runs on a Raspberry Pi Pico (RP2040) and is controlling a Stepper Motor Driver Module. The hardware is a TB6600 derivative from Toshiba, specifically the TB67S109AFTG.
 
-The Module's encloser is re-engineered and modified to make room for:
+The Module's enclosure is re-engineered and modified to make room for:
 1. The Pi Pico board with USB access
 2. DC/DC Converter to power the Pi Pico
 3. A serial RS-485 half-duplex converter and connectivity
@@ -15,23 +15,23 @@ The Module's encloser is re-engineered and modified to make room for:
 ## SOFTWARE
 
 ### MotionControl.py
-This module is the toplevel module that communicates with the master on the RS485 serial interface. It monitors the RS485 bus for commands and queries and acts on those that are intended for its hardware module.
+This module is the top-level module that communicates with the master on the RS485 serial interface. It monitors the RS485 bus for commands and queries and acts on those that are intended for its hardware module.
 
 ### lib/CommandQueue.py
 This module manages the mimicking of the AllMotion protocol as specified in Command_Set.pdf in the \Hardware\Datasheets folder.
 
 ### lib/StepConfiguration/py
 This module manages configuration parameters specific to this hardware.
-These include, but are not limitted to module number (RS485 is a multi drop communication bus), but also defaults used by StepControl.py
+These include, but are not limited to module number (RS485 is a multi-drop communication bus), but also defaults used by StepControl.py
  
 ### lib/StepControl.py
-This module manages the control of the low level stepper hardware's ENABLE, DIRECTION, and STEP signals.
-It takes speed, acceleration, move distance, stepsize etc as input, and then calculates a pulse delay table to create and execute a trapezoidal motion profile.
+This module manages the control of the low-level stepper hardware's ENABLE, DIRECTION, and STEP signals.
+It takes speed, acceleration, move distance, step size etc as input, and then calculates a pulse delay table to create and execute a trapezoidal motion profile.
 
 ### Utilities
 
 #### Utilities/SendRs485Command.py
-Run RS485 interface on Host
+Run RS485 interface on Host.
 
 #### Utilities/UsbCommand.py
 Use the REPL Host interface available on the USB of Pi Pico
