@@ -28,6 +28,14 @@ These include, but are not limitted to module number (RS485 is a multi drop comm
 This module manages the control of the low level stepper hardware's ENABLE, DIRECTION, and STEP signals.
 It takes speed, acceleration, move distance, stepsize etc as input, and then calculates a pulse delay table to create and execute a trapezoidal motion profile.
 
+### Utilities
+
+#### Utilities/SendRs485Command.py
+Run RS485 interface on Host
+
+#### Utilities/UsbCommand.py
+Use the REPL Host interface available on the USB of Pi Pico
+
 ## HARDWARE
 
 The hardware files consist of:
