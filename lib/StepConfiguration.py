@@ -12,6 +12,9 @@ import machine
 
 import json
 
+# Time module
+from time import sleep, sleep_ms
+
 # Filesystem to write data to non-volatile flash
 import os
 
@@ -29,7 +32,7 @@ class StepperConfiguration:
         "Acceleration" : 2000
     }
 
-    Data = ""
+    #Data = ""
     ConfigDate=[]
 
     def __init__(self):
@@ -74,6 +77,10 @@ class StepperConfiguration:
             config_file = open(self.CONFIGURATION_FILE)
             self.Data = config_file.read()
             config_file.close()
+            
+            # reconstructing the data as a dictionary
+            self.ConfigData = json.loads( self.Data )
+
 
         else:
             

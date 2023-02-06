@@ -22,7 +22,8 @@ from StepControl import Stepper
 from StepConfiguration import StepperConfiguration
 
 # Stepper driver command sequence
-class CommandSequence:    
+class CommandSequence:
+    
     # Regex definitions used within this class
     MY_ID               = "/1"
     MY_ID_REGEX         = "^\/1.*$"
@@ -38,12 +39,17 @@ class CommandSequence:
     #  List (queue) of commands
     CommandQueue = []
     
-    myStepper = Stepper()
-    myConfig = StepperConfiguration()
        
     def __init__(self):
-        pass
-
+        
+        # get the stored configuration
+        self.myConfig = StepperConfiguration()
+        
+        # Create a stepper object with that stored configuration
+        self. myStepper = Stepper(ss=self.myConfig.GetStepSize(),
+                                  vmax=self.myConfig.GetMaxVelocity(),
+                                  acc=self.myConfig.GetAcceleration())
+    
     def ThisController(self, string ):
         
         MyControllerNmbr = str(self.myConfig.GetControllerNumber())
